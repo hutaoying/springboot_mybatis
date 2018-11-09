@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+    <!--1.定义参数常量 -->
+    <property name="log.path" value="D:/logs"/>
+    <property name="log.level" value="info"/> <!--TRACE < DEBUG < INFO < WARN < ERROR -->
+    <property name="log.maxHistory" value="300"/>
+   <!-- <property name="log.filePath" value="d:/logs" />--><!--日志保存的路径-->
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" /><!--日志的输出格式-->
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+         <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+             <level>info</level>
+         </filter>-->
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/info.log</file><!-- 文件路径 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!--随着时间滚动-->
+            <fileNamePattern>${log.path}/iotbaas-%d{yyyy-MM-dd}-%i.gz</fileNamePattern><!-- 文件名称 -->
+            <!--<maxFileSize>5MB</maxFileSize>-->
+            <maxHistory>${log.maxHistory}</maxHistory> <!-- 文件最大保存历史数量 -->
+            <!--
+           当日志文件超过maxFileSize指定的大小是，根据上面提到的%i进行日志文件滚动 注意此处配置SizeBasedTriggeringPolicy是无法实现按文件大小进行滚动的，必须配置timeBasedFileNamingAndTriggeringPolicy
+           -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>15MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+    <!-- logback为java中的包 -->
+   <!--    <logger name="com.example.logging_learn.controller"/>-->
+    <!--logback.LogbackDemo：类的全路径 -->
+    <logger name="com.example.lombokdemo.mapper" level="debug" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+
+</configuration>
